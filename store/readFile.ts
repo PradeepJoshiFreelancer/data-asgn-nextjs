@@ -4,6 +4,8 @@ import path from "path";
 
 export default async function loadDataFromFile() {
   const configDirectory = path.resolve(process.cwd(), "store");
+  console.log(configDirectory);
+  console.log(path.join(configDirectory, "Trace1.txt"));
 
   const data = await fs.readFile(
     path.join(configDirectory, "Trace1.txt"),

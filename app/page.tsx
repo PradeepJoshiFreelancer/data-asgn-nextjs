@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader } from "@/components/card";
 import DropDownButton from "@/components/select";
 import Table from "@/components/table";
 import CheckBox from "@/components/toggleButton";
-import loadDataFromFile from "@/store/readFile";
 import { useEffect, useState } from "react";
+import loadDataFromFile from "@/store/readFile";
 
 export interface Item {
   value: string | number;
