@@ -1,5 +1,5 @@
 "use server";
-import { promises as fs } from "fs";
+import fs from "fs-extra";
 import path from "path";
 
 export default async function loadDataFromFile() {
@@ -7,7 +7,7 @@ export default async function loadDataFromFile() {
   console.log(configDirectory);
   console.log(path.join(configDirectory, "Trace1.txt"));
 
-  const data = await fs.readFile(
+  const data = fs.readFileSync(
     path.join(configDirectory, "Trace1.txt"),
     "utf8"
   );
