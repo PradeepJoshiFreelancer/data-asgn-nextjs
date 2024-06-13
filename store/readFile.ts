@@ -1,8 +1,14 @@
 "use server";
 import { promises as fs } from "fs";
+import path from "path";
 
 export default async function loadDataFromFile() {
-  const data = await fs.readFile(process.cwd() + "/store/Trace1.txt", "utf8");
+  const configDirectory = path.resolve(process.cwd(), "store");
+
+  const data = await fs.readFile(
+    path.join(configDirectory, "Trace1.txt"),
+    "utf8"
+  );
 
   const lines = data.split("\n");
   const finalLines: any[] = [];

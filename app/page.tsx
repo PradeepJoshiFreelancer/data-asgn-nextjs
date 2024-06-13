@@ -34,7 +34,6 @@ export default function Home() {
 
   useEffect(() => {
     loadDataFromFile().then((data) => {
-      console.log(data);
       const options: TransformedDataItem[] = [];
       let count = 1;
 
@@ -143,14 +142,8 @@ export default function Home() {
   const showRowsWithChangesHandller = () => {
     setShowRowsWithChanges((prevValue) => !prevValue);
     if (!showRowsWithChanges) {
-      console.log(1);
-
       setFilteredData(
         data.filter((item) => {
-          console.log(item["JS-Trns-Id"].value.toString());
-          console.log(selectedTrns);
-          console.log(item.hasChanges.value);
-
           return (
             item.hasChanges.value === "true" &&
             item["JS-Trns-Id"].value.toString() === selectedTrns
