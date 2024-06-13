@@ -6,7 +6,7 @@ export default async function loadDataFromFile() {
   const finalLines: any[] = [];
 
   try {
-    const configDirectory = path.resolve(process.cwd(), "store");
+    const configDirectory = path.resolve(process.cwd());
     console.log(configDirectory);
     console.log(path.join(configDirectory, "Trace1.txt"));
 

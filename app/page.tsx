@@ -5,7 +5,7 @@ import DropDownButton from "@/components/select";
 import Table from "@/components/table";
 import CheckBox from "@/components/toggleButton";
 import { useEffect, useState } from "react";
-import loadDataFromFile from "@/readFile";
+import loadDataFromFile from "@/store/readFile";
 
 export interface Item {
   value: string | number;
