@@ -6,9 +6,7 @@ export default async function loadDataFromFile() {
   const finalLines: any[] = [];
 
   try {
-    const configDirectory = path.resolve(process.cwd());
-    console.log(configDirectory);
-    console.log(path.join(configDirectory, "Trace1.txt"));
+    const configDirectory = path.resolve(process.cwd(), "store");
 
     const data = await fs.readFile(
       path.join(configDirectory, "Trace1.txt"),
@@ -37,13 +35,12 @@ export default async function loadDataFromFile() {
   } catch (error) {
     console.log("Error reading file:", error);
   }
-  return finalLines;
-
-  // fs.writeFile("file.txt", JSON.stringify(finalLines), function (err) {
+  // fs.writeFile("file.ts", JSON.stringify(finalLines), function (err) {
   //   if (err) {
   //     return console.error(err);
   //   }
   //   console.log("File created!");
   // });
   // console.log(finalLines);
+  return finalLines;
 }

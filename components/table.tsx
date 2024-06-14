@@ -1,4 +1,4 @@
-import { Item } from "@/app/page";
+import { Item } from "./data-asign-map";
 
 type Props = {
   item: { [key: string]: Item };
