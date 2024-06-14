@@ -5,7 +5,6 @@ import DropDownButton from "@/components/select";
 import Table from "@/components/table";
 import CheckBox from "@/components/toggleButton";
 import { useEffect, useState } from "react";
-import loadDataFromFile from "@/store/readFile";
 import { inputJSONType } from "@/app/page";
 
 export interface Item {
@@ -44,8 +43,6 @@ export default function DataAsignMap({ rawData }: Props) {
 
     for (let i = 0; i < rawData.length; i++) {
       let hasChanges = "false";
-      console.log(Object.keys(rawData[i]));
-
       if (rawData[i]["JS-Trns-Id"]) {
         const trnsId = JSON.stringify(rawData[i]["JS-Trns-Id"]);
 
@@ -112,7 +109,7 @@ export default function DataAsignMap({ rawData }: Props) {
             } else {
               changeIndicator =
                 //@ts-ignore
-                rawData[i][key] !== rawData[i - 1][key].value ? true : false;
+                rawData[i][key] !== rawData[i - 1][key] ? true : false;
               acc[key] = { value, changeIndicator };
             }
             if (changeIndicator && hasChanges === "false") hasChanges = "true";
@@ -128,8 +125,6 @@ export default function DataAsignMap({ rawData }: Props) {
         formattedData.push(formatedObj);
       }
     }
-
-    console.log(formattedData);
 
     setData(formattedData);
     setTrnsOptions(options);
@@ -190,20 +185,20 @@ export default function DataAsignMap({ rawData }: Props) {
               header="Trnsaction"
               options={trnsOptions}
               onChange={(e) => {
-                setSelectedTrns(e.target.value);
+                setSelectedTrns(() => e.target.value);
                 if (!showRowsWithChanges) {
                   setFilteredData(
                     data.filter(
                       (item) =>
                         item.hasChanges.value === "true" &&
-                        //@ts-ignore
-                        item["JS-Trns-Id"].value.toString() === e.target.value
+                        item["JS-Trns-Id"].value?.toString() === e.target.value
                     )
                   );
                 } else
                   setFilteredData(
                     data.filter(
-                      (item) => item["JS-Trns-Id"].value === e.target.value
+                      (item) =>
+                        item["JS-Trns-Id"].value?.toString() === e.target.value
                     )
                   );
                 setCurrentIndex(0);
