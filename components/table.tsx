@@ -1,7 +1,7 @@
 import { Item } from "./data-asign-map";
 
 type Props = {
-  item: { [key: string]: Item };
+  item: Item;
   showChanges: boolean;
 };
 
@@ -25,8 +25,10 @@ const Table = ({ item, showChanges }: Props) => {
         <tbody>
           {Object.entries(item).map(([key, value]) => {
             if (
-              (!showChanges || value.changeIndicator) &&
-              key !== "hasChanges"
+              // (!showChanges || value.changeIndicator) &&
+              // key !== "hasChanges"
+              !showChanges ||
+              value.changeIndicator
             ) {
               return (
                 <tr

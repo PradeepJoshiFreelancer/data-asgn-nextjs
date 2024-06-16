@@ -1,11 +1,11 @@
 type Props = {
-  onClickHandller: (num: number) => void;
+  onClickHandler: (num: number) => void;
   showPrevButton: boolean;
   showNextButton: boolean;
 };
 
 const ButtonPanel = ({
-  onClickHandller,
+  onClickHandler,
   showPrevButton,
   showNextButton,
 }: Props) => {
@@ -17,7 +17,7 @@ const ButtonPanel = ({
             <button
               type="button"
               className="bg-green-800 text-white rounded-l-md border-r border-green-100 py-2 hover:bg-green-700 hover:text-white px-3"
-              onClick={() => onClickHandller(-1)}
+              onClick={() => onClickHandler(-1)}
             >
               <div className="flex flex-row align-middle">
                 <svg
@@ -42,7 +42,7 @@ const ButtonPanel = ({
             <button
               type="button"
               className="bg-blue-800 text-white rounded-r-md py-2 border-l border-blue-200 hover:bg-blue-700 hover:text-white px-3"
-              onClick={() => onClickHandller(1)}
+              onClick={() => onClickHandler(1)}
             >
               <div className="flex flex-row align-middle">
                 <span className="mr-2">Next</span>
