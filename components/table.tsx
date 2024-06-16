@@ -25,10 +25,8 @@ const Table = ({ item, showChanges }: Props) => {
         <tbody>
           {Object.entries(item).map(([key, value]) => {
             if (
-              // (!showChanges || value.changeIndicator) &&
-              // key !== "hasChanges"
-              !showChanges ||
-              value.changeIndicator
+              (!showChanges || value.changeIndicator) &&
+              key !== "hasChanges"
             ) {
               return (
                 <tr

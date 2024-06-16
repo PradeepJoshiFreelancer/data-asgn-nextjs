@@ -16,9 +16,14 @@ export interface Item {
 type Props = {
   rawData: { [key: string]: inputJSONType[] };
   options: { id: number; value: string; label: string }[];
+  onUploadButtonClicked: () => void;
 };
 
-const DataAsignMap: React.FC<Props> = ({ rawData, options }) => {
+const DataAsignMap: React.FC<Props> = ({
+  rawData,
+  options,
+  onUploadButtonClicked,
+}) => {
   const [data, setData] = useState<{ [key: string]: Item[] }>({});
   const [filteredData, setFilteredData] = useState<Item[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,6 +31,9 @@ const DataAsignMap: React.FC<Props> = ({ rawData, options }) => {
   const [showRowsWithChanges, setShowRowsWithChanges] = useState(false);
   const [showChanges, setShowChanges] = useState(false);
   const [selectedTrns, setSelectedTrns] = useState("");
+
+  console.log(rawData);
+  console.log(options);
 
   useEffect(() => {
     const resultMap: { [key: string]: Item[] } | {} = {};
@@ -111,14 +119,16 @@ const DataAsignMap: React.FC<Props> = ({ rawData, options }) => {
 
     setData(resultMap);
     setCurrentIndex(0);
+  }, [rawData]);
 
+  useEffect(() => {
+    setTrnsOptions(options);
     if (options.length > 0) {
-      setSelectedTrns(options[0].value);
+      setSelectedTrns(() => options[0].value);
       //@ts-ignore
-      setFilteredData(resultMap[options[0].value]);
+      setFilteredData(() => data[options[0].value]);
     }
-  }, [rawData, options]);
-
+  }, [data, options]);
   const buttonClickedHandler = (num: number) => {
     if (
       (num < 0 && currentIndex > 0) ||
@@ -131,9 +141,9 @@ const DataAsignMap: React.FC<Props> = ({ rawData, options }) => {
   const showRowsWithChangesHandler = () => {
     setShowRowsWithChanges((prev) => !prev);
     if (showRowsWithChanges) {
-      setFilteredData(data[selectedTrns]);
+      setFilteredData(() => data[selectedTrns]);
     } else {
-      setFilteredData(
+      setFilteredData(() =>
         //@ts-ignore
         data[selectedTrns].filter((item) => item["hasChanges"].value === "true")
       );
@@ -142,12 +152,19 @@ const DataAsignMap: React.FC<Props> = ({ rawData, options }) => {
     setShowChanges(false);
   };
 
-  if (filteredData.length === 0) return <h1>Loading the file....</h1>;
+  if (!filteredData || filteredData.length === 0)
+    return <h1>Loading the file....</h1>;
 
   return (
-    <Card className="max-w-screen-md w-full transition-all hover:border-primary/20 shadow-lg dark:shadow-black/60 bg-white m-6 overflow-scroll">
+    <Card className="transition-all hover:border-primary/20 shadow-lg dark:shadow-black/60 bg-white m-6 overflow-scroll rounded-lg">
       <CardHeader title="Data Assign Map" />
       <CardContent>
+        <span
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2rounded"
+          onClick={onUploadButtonClicked}
+        >
+          Upload a new JSON File
+        </span>
         <div className="m-6 flex justify-between">
           <div className="flex flex-col justify-center">
             <DropDownButton

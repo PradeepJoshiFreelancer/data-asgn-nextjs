@@ -1,5 +1,7 @@
+"use client";
+import FileUpload from "@/components/FileUpload";
 import DataAsignMap from "@/components/data-asign-map";
-import { promises as fs } from "fs";
+import { useState } from "react";
 
 export interface inputJSONType {
   [key: string]: {
@@ -43,47 +45,77 @@ export interface inputJSONType {
   }[];
 }
 
-export default async function Home() {
-  const file = await fs.readFile(process.cwd() + "/store/Trace1.txt", "utf8");
+export default function Home() {
+  const [jsonContent, setJsonContent] = useState<
+    { [key: string]: inputJSONType[] } | {}
+  >({});
+  const [showUploadButton, setShowUploadButton] = useState(false);
 
-  const resultMap: { [key: string]: inputJSONType[] } = {};
-  const lines = file.split("\n");
+  const handleFileUpload = async (file: File) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      const resultMap: { [key: string]: inputJSONType[] } = {};
 
-  lines.forEach((line, i) => {
-    let finalLine = line.trim().replace(/^\s+|\s+$/gm, "");
-    try {
-      if (finalLine.slice(-4) === "}}0}") {
-        finalLine = finalLine.replace("}}0}", "}");
-      } else if (finalLine.slice(-1) === "}") {
-        const regex = /}+$/;
-        finalLine = finalLine.replace(regex, "}");
-      } else {
-        finalLine = finalLine + "}";
+      const content = fileReader.result as string;
+      if (content) {
+        const lines = content.split("\n");
+
+        lines.forEach((line, i) => {
+          let finalLine = line.trim().replace(/^\s+|\s+$/gm, "");
+          try {
+            if (finalLine.slice(-4) === "}}0}") {
+              finalLine = finalLine.replace("}}0}", "}");
+            } else if (finalLine.slice(-1) === "}") {
+              const regex = /}+$/;
+              finalLine = finalLine.replace(regex, "}");
+            } else {
+              finalLine = finalLine + "}";
+            }
+            let jsonObject = JSON.parse(finalLine);
+            const jsTrnsId = jsonObject["JS-Trns-Id"].toString();
+
+            if (!resultMap[jsTrnsId]) {
+              resultMap[jsTrnsId] = [];
+            }
+
+            resultMap[jsTrnsId].push(jsonObject);
+          } catch (error) {
+            console.log(i);
+            console.log(line);
+
+            console.error("Error parsing JSON:", error);
+          }
+        });
+        setJsonContent(() => resultMap);
+        console.log(resultMap);
       }
-      let jsonObject = JSON.parse(finalLine);
-      const jsTrnsId = jsonObject["JS-Trns-Id"].toString();
+      setShowUploadButton(true);
+    };
+    fileReader.readAsText(file);
+  };
+  //   fs.writeFile("file.ts", JSON.stringify(resultMap));
 
-      if (!resultMap[jsTrnsId]) {
-        resultMap[jsTrnsId] = [];
-      }
-
-      resultMap[jsTrnsId].push(jsonObject);
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-    }
-  });
-
-  const options = Object.keys(resultMap).map((item, i) => ({
+  const options = Object.keys(jsonContent).map((item, i) => ({
     id: i + 1,
     value: item,
     label: item,
   }));
 
-  //   fs.writeFile("file.ts", JSON.stringify(resultMap));
-
   return (
-    <div className="flex justify-center w-full h-screen bg-gray-300">
-      <DataAsignMap rawData={resultMap} options={options} />
-    </div>
+    <>
+      {!showUploadButton && (
+        <div className="flex justify-center w-full h-screen bg-gray-300">
+          <FileUpload onFileUpload={handleFileUpload} />
+        </div>
+      )}
+
+      {showUploadButton && (
+        <DataAsignMap
+          rawData={jsonContent}
+          options={options}
+          onUploadButtonClicked={() => setShowUploadButton(false)}
+        />
+      )}
+    </>
   );
 }
