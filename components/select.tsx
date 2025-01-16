@@ -22,7 +22,7 @@ const DropDownButton = ({
   onChange,
 }: Props) => {
   return (
-    <div className="max-w-sm mx-auto flex justify-center">
+    <div className="max-w-sm mx-auto flex justify-center m-4 p-2">
       {showLabel && (
         <label
           htmlFor={id}

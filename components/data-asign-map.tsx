@@ -31,9 +31,28 @@ const DataAsignMap: React.FC<Props> = ({
   const [showRowsWithChanges, setShowRowsWithChanges] = useState(false);
   const [showChanges, setShowChanges] = useState(false);
   const [selectedTrns, setSelectedTrns] = useState("");
-
-  console.log(rawData);
-  console.log(options);
+  const dataFilter = [
+    {
+      id: 0,
+      value: "All",
+      label: "All",
+    },
+    {
+      id: 1,
+      value: "Option",
+      label: "Option",
+    },
+    {
+      id: 2,
+      value: "Cov Cat",
+      label: "Cov Cat",
+    },
+    {
+      id: 2,
+      value: "Price",
+      label: "Price",
+    },
+  ];
 
   useEffect(() => {
     const resultMap: { [key: string]: Item[] } | {} = {};
@@ -166,7 +185,7 @@ const DataAsignMap: React.FC<Props> = ({
           Upload a new JSON File
         </span>
         <div className="m-6 flex justify-between">
-          <div className="flex flex-col justify-center">
+          <div className="flex justify-between">
             <DropDownButton
               id="trnsIds"
               header="Transaction"
@@ -185,6 +204,12 @@ const DataAsignMap: React.FC<Props> = ({
                 }
                 setCurrentIndex(0);
               }}
+            />
+            <DropDownButton
+              id="data"
+              header="Fields"
+              options={dataFilter}
+              onChange={() => {}}
             />
           </div>
           <div className="flex flex-col justify-center m-4 min-w-48">
